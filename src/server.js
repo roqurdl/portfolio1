@@ -1,5 +1,7 @@
 import express from "express";
 import morgan from "morgan";
+//
+import "./db";
 //Router
 import rootRouter from "./router/rootRouter";
 import shopRouter from "./router/shopRouter";

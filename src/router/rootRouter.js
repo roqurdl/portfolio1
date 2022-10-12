@@ -8,6 +8,7 @@ function home(req, res) {
 function login(req, res) {
   return res.render(`screens/login`);
 }
+
 rootRouter.get("/", home);
 rootRouter.get("/login", login);
 
