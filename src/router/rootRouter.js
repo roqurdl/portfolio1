@@ -1,15 +1,10 @@
 import express from "express";
-
+import { home, shop } from "../controller/productController";
+import { login } from "../controller/userController";
 const rootRouter = express.Router();
 
-function home(req, res) {
-  return res.render(`screens/home`);
-}
-function login(req, res) {
-  return res.render(`screens/login`);
-}
-
 rootRouter.get("/", home);
+rootRouter.get("/shop", shop);
 rootRouter.get("/login", login);
 
 export default rootRouter;

@@ -1,3 +1,8 @@
 extends ../layout.pug
+include ../mixins/products.pug
 block contents 
     p This is homePage
+    div.Live 
+    div.Product
+        //- each product in products
+        //-     +productList(product)

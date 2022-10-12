@@ -4,7 +4,7 @@ import morgan from "morgan";
 import "./db";
 //Router
 import rootRouter from "./router/rootRouter";
-import shopRouter from "./router/shopRouter";
+import productRouter from "./router/productRouter";
 
 const app = express();
 const logger = morgan(`dev`);
@@ -15,6 +15,6 @@ app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 
 app.use(`/`, rootRouter);
-app.use(`/shop`, shopRouter);
+app.use(`/product`, productRouter);
 
 export default app;
