@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 //
 import "./db";
+import "./models/Product";
 //Router
 import rootRouter from "./router/rootRouter";
 import productRouter from "./router/productRouter";

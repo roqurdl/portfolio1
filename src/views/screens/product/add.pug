@@ -1,9 +1,9 @@
 extends ../../layout.pug
 block contents 
     form(method="POST")
-        input(id="productImage" name="productImage" type="file")
+        input(id="productImage" name="productImage" type="file" accept="image/*,.pdf")
         input(id="productName" name="productName" type="text" placeholder="Write Product Name" required)
         input(id="price" name="price" type="text" placeholder="Write Price" required)
         input(id="productDescription" name="productDescription" type="text" placeholder="Write Description")
-        input(id="descriptionFile" name="descriptionFile" type="file")
+        input(id="descriptionFile" name="descriptionFile" type="file" accept="image/*,.pdf")
         button Add Product

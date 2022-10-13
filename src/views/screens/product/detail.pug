@@ -1,1 +1,11 @@
 extends ../../layout.pug
+block contents 
+    div
+        nav 
+            ul 
+                li 
+                    a(href=`/product/${product.id}/edit`) Edit Product
+    div
+        h1 #{product.title} 
+        p #{product.price}
+        p #{product.description}

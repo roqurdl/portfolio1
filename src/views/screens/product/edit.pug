@@ -1,0 +1,10 @@
+extends ../../layout.pug
+block contents 
+    form(method="POST")
+        input(id="productImage" name="productImage" type="file" value=`${product.productImg}` accept="image/*,.pdf")
+        input(id="productName" name="productName" type="text" placeholder="Write Product Name" required value=`${product.title}`) 
+        input(id="price" name="price" type="text" placeholder="Write Price" required value=`${product.price}`)
+        input(id="productDescription" name="productDescription" type="text" placeholder="Write Description" value=`${product.description}`)
+        input(id="descriptionFile" name="descriptionFile" type="file" value=`${product.descriptImg}` accept="image/*,.pdf")
+        button Edit Product
+    a(href=`/product/${product.id}/delete`) Delete Product &rarr;
