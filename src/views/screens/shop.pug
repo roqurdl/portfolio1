@@ -1,11 +1,10 @@
 extends ../layout.pug
 include ../mixins/products.pug
 block contents
-    div 
-        h2 ProductList is Here.
     nav
         ul 
             li
                 a(href="/product/add") Add Product
-    each product in products
-        
+    div
+        each product in products 
+            +productList(product)
