@@ -15,6 +15,7 @@ app.set("views", process.cwd() + "/src/views");
 
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
+app.use(`/products`, express.static(`products`));
 app.use(`/`, rootRouter);
 app.use(`/product`, productRouter);
 

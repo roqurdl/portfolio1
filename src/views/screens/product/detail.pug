@@ -6,6 +6,9 @@ block contents
                 li 
                     a(href=`/product/${product.id}/edit`) Edit Product
     div
+        img(src=`/${product.productImg}`)
+        h1 #{product.productImg} 
         h1 #{product.title} 
         p #{product.price}
         p #{product.description}
+        img(src=`/${product.descriptImg}`)
