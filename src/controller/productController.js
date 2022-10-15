@@ -15,15 +15,15 @@ export const getAddProduct = (req, res) => {
 };
 export const postAddProduct = async (req, res) => {
   const {
-    files: { productImage, descriptionFile },
-    body: { productName, price, productDescription },
+    files: { productImg, descriptImg },
+    body: { productName, price, description },
   } = req;
   await Product.create({
     title: productName,
     price,
-    description: productDescription,
-    productImg: productImage[0].path,
-    descriptImg: descriptionFile[0].path,
+    description,
+    productImg: productImg[0].path,
+    descriptImg: descriptImg[0].path,
   });
   return res.redirect(`/`);
 };
@@ -31,7 +31,6 @@ export const postAddProduct = async (req, res) => {
 export const detail = async (req, res) => {
   const { id } = req.params;
   const product = await Product.findById(id);
-  console.log(product.descriptImg);
   return res.render(`${URL_PRODUCT}/detail`, { product });
 };
 
@@ -42,16 +41,17 @@ export const getEdit = async (req, res) => {
 };
 export const postEdit = async (req, res) => {
   const { id } = req.params;
+  const preImg = await Product.findById(id);
   const {
-    files: { productImage, descriptionFile },
-    body: { productName, price, productDescription },
+    files: { productImg, descriptImg },
+    body: { productName, price, description },
   } = req;
   await Product.findByIdAndUpdate(id, {
     title: productName,
     price,
-    description: productDescription,
-    productImg: productImage[0].path,
-    descriptImg: descriptionFile[0].path,
+    description,
+    productImg: req.files ? productImg[0].path : preImg.productImg,
+    descriptImg: req.files ? descriptImg[0].path : preImg.descriptImg,
   });
   return res.redirect(`/product/${id}`);
 };

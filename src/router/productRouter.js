@@ -16,8 +16,8 @@ productRouter
   .get(getEdit)
   .post(
     addProduct.fields([
-      { name: `productImage`, maxcount: 1 },
-      { name: `descriptionFile`, maxcount: 1 },
+      { name: `productImg`, maxcount: 1 },
+      { name: `descriptImg`, maxcount: 1 },
     ]),
     postEdit
   );
@@ -27,8 +27,8 @@ productRouter
   .get(getAddProduct)
   .post(
     addProduct.fields([
-      { name: `productImage`, maxcount: 1 },
-      { name: `descriptionFile`, maxcount: 1 },
+      { name: `productImg`, maxcount: 1 },
+      { name: `descriptImg`, maxcount: 1 },
     ]),
     postAddProduct
   );
