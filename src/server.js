@@ -6,6 +6,7 @@ import "./models/Product";
 //Router
 import rootRouter from "./router/rootRouter";
 import productRouter from "./router/productRouter";
+import stylistRouter from "./router/stylistRouter";
 
 const app = express();
 const logger = morgan(`dev`);
@@ -18,5 +19,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(`/products`, express.static(`products`));
 app.use(`/`, rootRouter);
 app.use(`/product`, productRouter);
+app.use(`/stylist`, stylistRouter);
 
 export default app;

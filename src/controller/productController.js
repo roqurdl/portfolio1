@@ -2,8 +2,9 @@ import Product from "../models/Product";
 
 const URL_PRODUCT = `screens/product`;
 
-export const home = (req, res) => {
-  return res.render(`screens/home`);
+export const home = async (req, res) => {
+  const products = await Product.find({});
+  return res.render(`screens/home`, { products });
 };
 
 export const shop = async (req, res) => {
@@ -11,7 +12,7 @@ export const shop = async (req, res) => {
   return res.render(`screens/shop`, { products });
 };
 export const getAddProduct = (req, res) => {
-  return res.render(`screens/product/add`);
+  return res.render(`${URL_PRODUCT}/add`);
 };
 export const postAddProduct = async (req, res) => {
   const {
@@ -42,6 +43,7 @@ export const getEdit = async (req, res) => {
 export const postEdit = async (req, res) => {
   const { id } = req.params;
   const preImg = await Product.findById(id);
+  /** 후에 session을 활용해서 대체 */
   const {
     files: { productImg, descriptImg },
     body: { productName, price, description },
