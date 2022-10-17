@@ -1,8 +1,8 @@
-extends ../layout.pug
+extends ../../layout.pug
 block contents
     form(method="POST" enctype="multipart/form-data")
         input(id="stylistImg" name="stylistImg" type="file")
-        input(id="stylistName" name="stylistName" type="text" required)
-        input(id="stylistSummary" name="stylistSummary" type="text")
+        input(id="stylistName" name="stylistName" type="text" placeholder="Write Name" required)
+        input(id="stylistSummary" name="stylistSummary" type="text" placeholder="Write Summary")
         input(id="summaryImg" name="summaryImg" type="file")
         button Add Stylist

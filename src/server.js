@@ -3,6 +3,7 @@ import morgan from "morgan";
 //
 import "./db";
 import "./models/Product";
+import "./models/Stylist";
 //Router
 import rootRouter from "./router/rootRouter";
 import productRouter from "./router/productRouter";
