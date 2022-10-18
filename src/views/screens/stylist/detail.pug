@@ -1,2 +1,8 @@
 extends ../../layout.pug
 block contents
+    a(href=`/stylist/${stylist.id}/edit`) Edit Stylist &rarr;
+    div
+        h1 #{stylist.stylistName}
+        img(src=`/${stylist.stylistImg}`)
+        q #{stylist.stylistSummary}
+        img(src=`/${stylist.summaryImg}`)

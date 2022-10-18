@@ -1,5 +1,7 @@
 extends ../layout.pug
+include ../mixins/stylists.pug
 block contents
     a(href=`/stylist/add`) New Stylist &rarr;
     div.Stylist
-        // Img & info....
+        each stylist in stylists 
+            +stylistList(stylist)

@@ -1,2 +1,9 @@
 extends ../../layout.pug
 block contents
+    a(href=`/stylist/${stylist.id}/delete`) Delete Stylist &rarr;
+    form(method="POST" enctype="multipart/form-data")
+        input(id="stylistImg" name="stylistImg" type="file" accept="image/*,.pdf" required)
+        input(id="stylistName" name="stylistName" type="text" placeholder="Write Name" required value=`${stylist.stylistName}`)
+        input(id="stylistSummary" name="stylistSummary" type="text" placeholder="Write Summary" value=`${stylist.stylistSummary}`)
+        input(id="summaryImg" name="summaryImg" type="file" accept="image/*,.pdf" required)
+        button Add Stylist

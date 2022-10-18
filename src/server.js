@@ -18,6 +18,8 @@ app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 app.use(`/products`, express.static(`products`));
+app.use(`/stylists`, express.static(`stylists`));
+
 app.use(`/`, rootRouter);
 app.use(`/product`, productRouter);
 app.use(`/stylist`, stylistRouter);
