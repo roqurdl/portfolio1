@@ -1,5 +1,7 @@
 import express from "express";
 import morgan from "morgan";
+import http from "http";
+import { Server } from "socket.io";
 //
 import "./db";
 import "./models/Product";
@@ -8,8 +10,11 @@ import "./models/Stylist";
 import rootRouter from "./router/rootRouter";
 import productRouter from "./router/productRouter";
 import stylistRouter from "./router/stylistRouter";
+import liveRouter from "./router/liveRouter";
 
 const app = express();
+const httpServer = http.createServer(app);
+const io = new Server(httpServer);
 const logger = morgan(`dev`);
 
 app.set("view engine", "pug");
@@ -23,5 +28,8 @@ app.use(`/stylists`, express.static(`stylists`));
 app.use(`/`, rootRouter);
 app.use(`/product`, productRouter);
 app.use(`/stylist`, stylistRouter);
+app.use(`/live`, liveRouter);
 
-export default app;
+// Socket IO
+
+export default httpServer;
