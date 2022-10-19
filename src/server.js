@@ -14,7 +14,7 @@ import liveRouter from "./router/liveRouter";
 
 const app = express();
 const httpServer = http.createServer(app);
-const io = new Server(httpServer);
+export const io = new Server(httpServer);
 const logger = morgan(`dev`);
 
 app.set("view engine", "pug");
@@ -22,6 +22,7 @@ app.set("views", process.cwd() + "/src/views");
 
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
+app.use(`/public`, express.static(__dirname + "/public"));
 app.use(`/products`, express.static(`products`));
 app.use(`/stylists`, express.static(`stylists`));
 
@@ -32,4 +33,7 @@ app.use(`/live`, liveRouter);
 
 // Socket IO
 
+io.on("connection", (socket) => {
+  console.log("a user connected");
+});
 export default httpServer;

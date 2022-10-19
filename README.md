@@ -33,3 +33,9 @@ Live SocketIO 설계
 
 adater => mongodb에 저장 ==> mongo adapter.
 room들 중 public&private 분리, List를 Array로 만듦 => mixin을 활용해서 링크화.
+
+liveController, server => backend (node.js)
+liveApp => frontend
+form action 을 통해 url을 구성하여 create room에서 room detail로 가는 것으로 한번 ㄱ
+영상은 host만 가능하게 채팅은 모두가 가능 WebRTC사용 +Data Channel(채팅기능)
+mongo adapter 분석필요.
