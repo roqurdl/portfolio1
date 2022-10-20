@@ -1,0 +1,9 @@
+extends ../../layout.pug
+block contents
+        form(method="post")
+            input(placeholder="room name", required, type="text" id="roomName" name="roomName")
+            input(placeholder="Your name", required, type="text" id="userName")
+            button Enter room
+//- block scripts
+//-     script(src=`/socket.io/socket.io.js`)
+//-     script(src=`/public/js/liveApp.js`)

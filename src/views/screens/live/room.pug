@@ -1,0 +1,14 @@
+extends ../../layout.pug
+block contents
+    div.videoBox
+        video(autoplay, width=400, height=400)
+        button#mute Mute
+        button#camera Camera Off
+    div.messageBox
+        ul
+        form
+            input(type="text" placeholder="Write a message")
+            button Send 
+block scripts
+    script(src=`/socket.io/socket.io.js`)
+    script(src=`/public/js/liveApp.js`)
