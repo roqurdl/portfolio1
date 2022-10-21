@@ -1,9 +1,10 @@
 extends ../../layout.pug
 block contents
     div.videoBox
-        video(autoplay, width=400, height=400)
+        video#video(autoplay, width=400, height=400, playsinline)
         button#mute Mute
         button#camera Camera Off
+        select#cameras
     div.messageBox
         ul
         form
