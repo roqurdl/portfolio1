@@ -11,6 +11,7 @@ import rootRouter from "./router/rootRouter";
 import productRouter from "./router/productRouter";
 import stylistRouter from "./router/stylistRouter";
 import liveRouter from "./router/liveRouter";
+import { doesNotMatch } from "assert";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -35,5 +36,13 @@ app.use(`/live`, liveRouter);
 
 io.on("connection", (socket) => {
   console.log("a user connected");
+  socket.on(`join_room`, (roomName, done) => {
+    socket.join(roomName);
+    done();
+    socket.to(roomName).emit(`start`);
+  });
+  socket.on("offer", (offer, roomName) => {
+    socket.to(roomName).emit("offer", offer);
+  });
 });
 export default httpServer;
