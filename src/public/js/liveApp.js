@@ -87,28 +87,40 @@ camerasSelect.addEventListener("input", handleCameraChange);
 // Socket
 const roomName = window.location.pathname.slice(11);
 
-async function startRoom() {
-  await getMedia();
-  makeConnection();
-}
-
-socket.emit(`join_room`, roomName, startRoom);
+socket.emit(`join_room`, roomName);
 
 socket.on(`start`, async () => {
+  await getMedia();
+  makeConnection();
   const offer = await myPeerConnection.createOffer();
   myPeerConnection.setLocalDescription(offer);
   console.log("sent the offer");
   socket.emit("offer", offer, roomName);
 });
 
-socket.on("offer", (offer) => {
-  console.log(offer);
+socket.on("offer", async (offer) => {
+  myPeerConnection.setRemoteDescription(offer);
+  const answer = await myPeerConnection.createAnswer();
+  myPeerConnection.setLocalDescription(answer);
+  socket.emit("answer", answer, roomName);
 });
+socket.on("answer", (answer) => {
+  myPeerConnection.setRemoteDescription(answer);
+});
+function handleAddStream(data) {
+  const peerFace = document.getElementById("peerFace");
+  peerFace.srcObject = data.stream;
+}
 
 //RTC
 function makeConnection() {
   myPeerConnection = new RTCPeerConnection();
+  myPeerConnection.addEventListener("icecandidate", handleIce);
   myStream
     .getTracks()
     .forEach((track) => myPeerConnection.addTrack(track, myStream));
+}
+
+function handleIce(data) {
+  socket.emit("ice", data.candidate, roomName);
 }

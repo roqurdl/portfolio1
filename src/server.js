@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import http from "http";
 import { Server } from "socket.io";
+
 //
 import "./db";
 import "./models/Product";
@@ -11,7 +12,6 @@ import rootRouter from "./router/rootRouter";
 import productRouter from "./router/productRouter";
 import stylistRouter from "./router/stylistRouter";
 import liveRouter from "./router/liveRouter";
-import { doesNotMatch } from "assert";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -36,13 +36,18 @@ app.use(`/live`, liveRouter);
 
 io.on("connection", (socket) => {
   console.log("a user connected");
-  socket.on(`join_room`, (roomName, done) => {
+  socket.on(`join_room`, (roomName) => {
     socket.join(roomName);
-    done();
     socket.to(roomName).emit(`start`);
   });
   socket.on("offer", (offer, roomName) => {
     socket.to(roomName).emit("offer", offer);
+  });
+  socket.on("answer", (answer, roomName) => {
+    socket.to(roomName).emit("answer", answer);
+  });
+  socket.on("ice", (ice, roomName) => {
+    socket.to(roomName).emit("ice", ice);
   });
 });
 export default httpServer;
