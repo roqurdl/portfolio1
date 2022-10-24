@@ -24,8 +24,7 @@ app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 app.use(`/public`, express.static(__dirname + "/public"));
-app.use(`/products`, express.static(`products`));
-app.use(`/stylists`, express.static(`stylists`));
+app.use(`/uploads`, express.static(`uploads`));
 
 app.use(`/`, rootRouter);
 app.use(`/product`, productRouter);

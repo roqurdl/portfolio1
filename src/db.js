@@ -15,7 +15,7 @@ const mongoClient = new MongoClient(MONGO_URL, {
 export const mongoDbConnect = async () => {
   await mongoClient.connect();
 
-  const mongoCollection = mongoClient.db(DB).collection(COLLECTION);
+  const mongoCollection = mongoClient.db(db).collection(`mongoAdapter`);
 
   await mongoCollection.createIndex(
     { createdAt: 1 },

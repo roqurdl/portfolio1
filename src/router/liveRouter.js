@@ -1,7 +1,7 @@
 import express from "express";
-import { liveHome, getCreateRoom } from "../controller/liveController";
+import { liveHome, getAddLive } from "../controller/liveController";
 const liveRouter = express.Router();
 
 liveRouter.get(`/`, liveHome);
-liveRouter.get(`/room`, getCreateRoom);
+liveRouter.route(`/add`).get(getAddLive);
 export default liveRouter;

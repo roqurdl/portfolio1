@@ -3,10 +3,9 @@ const URL_LIVE = `screens/live`;
 export const liveHome = (req, res) => {
   return res.render(`screens/lives`);
 };
-export const getCreateRoom = (req, res) => {
-  return res.render(`${URL_LIVE}/room`);
+export const getAddLive = (req, res) => {
+  return res.render(`${URL_LIVE}/add`);
 };
-// export const postCreateRoom = (req, res) => {
-//   const { roomName } = req.body;
-//   return res.redirect(`/live/room/${roomName}`);
-// };
+export const postAddLive = (req, res) => {
+  return res.redirect(`/live`);
+};
