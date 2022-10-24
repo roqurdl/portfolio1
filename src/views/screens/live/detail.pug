@@ -1,2 +1,7 @@
 extends ../../layout.pug
 block contents
+    div
+        h1 #{live.liveTitle} 
+        video(width="500", height="500" controls)
+            source(src=`/${live.liveUrl}`)
+        a(href=`/live/${live.id}/edit`) Edit Live &rarr;

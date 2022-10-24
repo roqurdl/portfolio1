@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const liveSchema = mongoose.Schema({
-  videoTitle: { type: String },
-  videoUrl: { type: String },
-  videoDescription: { type: String },
+  liveTitle: { type: String },
+  liveUrl: { type: String },
+  liveDescription: { type: String },
 });
 
 const Live = mongoose.model(`Live`, liveSchema);

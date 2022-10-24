@@ -1,2 +1,8 @@
 extends ../../layout.pug
 block contents
+    form(method="POST" enctype="multipart/form-data")
+
+     input(id="liveTitle" name="liveTitle" type="text" placeholder="Write Title" value=`${live.liveTitle}`) 
+     input(id="liveDescription" name="liveDescription" type="text" placeholder="Write Description" value=`${live.liveDescription}`)
+     button Edit Video
+     a(href=`/live/${live.id}/delete`) Delete Live &rarr;

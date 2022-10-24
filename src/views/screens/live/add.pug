@@ -1,7 +1,7 @@
 extends ../../layout.pug
 block contents
     form(method="POST" enctype="multipart/form-data")
-     input(name="videoFile" type="file" accept="video/*") 
-     input(name="videoTitle" type="text" placeholder="Write Title") 
-     input(name="videoDescription" type="text" placeholder="Write Description")
+     input(id="liveFile" name="liveFile" type="file" accept="video/*") 
+     input(id="liveTitle" name="liveTitle" type="text" placeholder="Write Title") 
+     input(id="liveDescription" name="liveDescription" type="text" placeholder="Write Description")
      button Add Video 
