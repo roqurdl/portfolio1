@@ -3,7 +3,7 @@
 Descrition
 옷코디 + 라이브커머스 서비스
 
-With Node.js, REST API, MongoDB, WebSocket, socketIO
+With Node.js, REST API, MongoDB, socketIO
 
 shop
 -Item
@@ -42,3 +42,6 @@ mongo adapter 분석필요.// => 불가능한 것으로 판별.
 동영상을 올리는 방식으로 Live를 대신하는 것으로.
 
 WebRTC의 Data Channel의 기능을 통해서 채팅상담 기능을 추가할 것.
+
+user CURD Basic
+node Streaming 적용

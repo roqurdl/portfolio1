@@ -1,4 +1,5 @@
 import express from "express";
+import session from "express-session";
 import morgan from "morgan";
 import http from "http";
 import { Server } from "socket.io";
@@ -12,6 +13,7 @@ import rootRouter from "./router/rootRouter";
 import productRouter from "./router/productRouter";
 import stylistRouter from "./router/stylistRouter";
 import liveRouter from "./router/liveRouter";
+import userRouter from "./router/userRouter";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -22,6 +24,14 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 
 app.use(logger);
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true },
+  })
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(`/public`, express.static(__dirname + "/public"));
 app.use(`/uploads`, express.static(`uploads`));
@@ -30,6 +40,7 @@ app.use(`/`, rootRouter);
 app.use(`/product`, productRouter);
 app.use(`/stylist`, stylistRouter);
 app.use(`/live`, liveRouter);
+app.use(`/user`, userRouter);
 
 // Socket IO
 

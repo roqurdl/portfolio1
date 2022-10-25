@@ -38,7 +38,6 @@ export const postLiveEdit = async (req, res) => {
     params: { id },
     body: { liveTitle, liveDescription },
   } = req;
-  const preLive = await Live.findById(id);
   await Live.findByIdAndUpdate(id, {
     liveTitle,
 
