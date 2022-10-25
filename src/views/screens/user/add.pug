@@ -1,8 +1,11 @@
 extends ../../layout.pug
 block contents
+    if pageError
+        p=pageError
     form(method="POST")
-        input(name="name", type="text", required)
-        input(name="email", type="email", required)
-        input(name="username", type="text", required)
-        input(name="password", type="password", required)
+        input(id="name" name="name", type="text", required placeholder="Write your name")
+        input(id="email" name="email", type="email", required placeholder="Write your email")
+        input(id="username" name="username", type="text", required placeholder="Write your username")
+        input(id="password" name="password", type="password", required placeholder="Write your password")
+        input(id="pwconfirm" name="pwconfirm", type="password", required placeholder="Confirm the password")
         input(type="submit", value="Join")

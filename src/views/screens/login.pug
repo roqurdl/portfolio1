@@ -1,7 +1,9 @@
 extends ../layout.pug
-block contents 
-    form
-        input(type="email")
-        input(type="password")
+block contents
+    if pageError
+        p=pageError
+    form(method="POST")
+        input(id="username" name="username" type="text" placeholder="Write your username")
+        input(id="password" name="password" type="password" placeholder="Write your password")
         button Login
     a(href="/user/add") Don't have account? 

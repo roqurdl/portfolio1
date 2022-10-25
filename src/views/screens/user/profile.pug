@@ -1,0 +1,7 @@
+extends ../../layout.pug
+block contents
+    div 
+        h1 #{loggedInUser.name}'s Profile 
+        p  #{loggedInUser.email}
+        p  #{loggedInUser.username}
+    a(href=`/user/${loggedInUser._id}/edit`) Edit Profile

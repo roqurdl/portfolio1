@@ -3,11 +3,13 @@ import session from "express-session";
 import morgan from "morgan";
 import http from "http";
 import { Server } from "socket.io";
+import MongoStore from "connect-mongo";
 
 //
 import "./db";
 import "./models/Product";
 import "./models/Stylist";
+import { localMiddleware } from "./middleware";
 //Router
 import rootRouter from "./router/rootRouter";
 import productRouter from "./router/productRouter";
@@ -29,13 +31,15 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/herse" }),
+    // cookie: { secure: true },
   })
 );
 app.use(express.urlencoded({ extended: true }));
 app.use(`/public`, express.static(__dirname + "/public"));
 app.use(`/uploads`, express.static(`uploads`));
 
+app.use(localMiddleware);
 app.use(`/`, rootRouter);
 app.use(`/product`, productRouter);
 app.use(`/stylist`, stylistRouter);

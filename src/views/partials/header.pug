@@ -11,5 +11,11 @@ header
                 a(href=`/shop`) shop
             li 
                 a(href=`/category`) Category
-            li 
-                a(href=`/login`) Login
+            if loggedIn 
+                li
+                    a(href=`/user/${loggedInUser._id}/profile`) #{loggedInUser.name}'s Profile
+                li 
+                    a(href="/logout") Log Out
+            else    
+                li 
+                    a(href=`/login`) Login

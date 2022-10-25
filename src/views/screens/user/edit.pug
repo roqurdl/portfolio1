@@ -1,2 +1,10 @@
 extends ../../layout.pug
 block contents
+    form(method="POST")
+        input(id="name" name="name", type="text", required value=`${loggedInUser.name}`)
+        input(id="email" name="email", type="email", required value=`${loggedInUser.email}`)
+        input(id="username" name="username", type="text", required value=`${loggedInUser.username}`)
+        input(type="submit", value="Join")
+    a(href=`/user/${loggedInUser._id}/password`) Edit password
+    br
+    a(href=`/user/${loggedInUser._id}/delete`) Delete Account

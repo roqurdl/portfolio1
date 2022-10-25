@@ -44,4 +44,5 @@ mongo adapter 분석필요.// => 불가능한 것으로 판별.
 WebRTC의 Data Channel의 기능을 통해서 채팅상담 기능을 추가할 것.
 
 user CURD Basic
+Login=> use session
 node Streaming 적용
