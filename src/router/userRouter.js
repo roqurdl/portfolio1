@@ -5,11 +5,18 @@ import {
   profile,
   getEdit,
   postEdit,
+  getEditPassword,
+  postEditPassword,
+  deleteUser,
 } from "../controller/userController";
 const userRouter = express.Router();
 
 userRouter.route(`/add`).get(getAddAccount).post(postAddAccount);
 userRouter.get(`/:id([0-9a-f]{24})/profile`, profile);
 userRouter.route(`/:id([0-9a-f]{24})/edit`).get(getEdit).post(postEdit);
-
+userRouter
+  .route(`/:id([0-9a-f]{24})/password`)
+  .get(getEditPassword)
+  .post(postEditPassword);
+userRouter.get(`/:id([0-9a-f]{24})/delete`, deleteUser);
 export default userRouter;
