@@ -4,6 +4,7 @@ import morgan from "morgan";
 import http from "http";
 import { Server } from "socket.io";
 import MongoStore from "connect-mongo";
+import fs from "fs";
 
 //
 import "./db";
@@ -38,6 +39,9 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(`/public`, express.static(__dirname + "/public"));
 app.use(`/uploads`, express.static(`uploads`));
+app.get(`uploads/lives`, function (req, res) {
+  return console.log(req);
+});
 
 app.use(localMiddleware);
 app.use(`/`, rootRouter);
