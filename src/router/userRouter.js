@@ -8,6 +8,8 @@ import {
   getEditPassword,
   postEditPassword,
   deleteUser,
+  startGithub,
+  finishGithub,
 } from "../controller/userController";
 const userRouter = express.Router();
 
@@ -21,5 +23,6 @@ userRouter
   .post(postEditPassword);
 userRouter.get(`/:id([0-9a-f]{24})/delete`, deleteUser);
 //Social User
-
+userRouter.get(`/github/request`, startGithub);
+userRouter.get(`/github/callback`, finishGithub);
 export default userRouter;

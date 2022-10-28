@@ -1,4 +1,5 @@
 import User from "../models/User";
+import axios from "axios";
 import bcrypt from "bcrypt";
 
 const URL_USER = `screens/user`;
@@ -51,10 +52,40 @@ export const postAddAccount = async (req, res) => {
 };
 
 //Social Login
-export function getGithub(req, res) {
-  return res.end();
+export function startGithub(req, res) {
+  const baseUrl = `https://github.com/login/oauth/authorize`;
+  const config = {
+    client_id: process.env.GH_ID,
+    allow_signup: false,
+    scope: "read:user user:email",
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.redirect(finalUrl);
+}
+export async function finishGithub(req, res) {
+  const token = await axios({
+    method: "post",
+    url: `https://github.com/login/oauth/access_token`,
+    headers: { Accept: "application/json" },
+    params: {
+      client_id: process.env.GH_ID,
+      client_secret: process.env.GH_SECRET,
+      code: req.query.code,
+    },
+  });
+  if ("access_token" in token.data) {
+    const { access_token } = token.data;
+    const userData = await axios({
+      method: "get",
+      url: `https://api.github.com/user`,
+      headers: { Authorization: `Bearer ${access_token}` },
+    });
+    console.log(userData.data);
+  }
 }
 
+//
 export const profile = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);

@@ -33,7 +33,6 @@ app.use(
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
-    // cookie: { secure: true },
   })
 );
 app.use(express.urlencoded({ extended: true }));
