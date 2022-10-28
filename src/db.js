@@ -1,14 +1,15 @@
+require(`dotenv`).config();
 import { io } from "./server";
 import mongoose from "mongoose";
 import { MongoClient } from "mongodb";
 
 const MONGO_URL = `mongodb://127.0.0.1:27017/herse`;
 
-mongoose.connect(MONGO_URL);
+mongoose.connect(process.env.DB_URL);
 
 const db = mongoose.connection;
 
-const mongoClient = new MongoClient(MONGO_URL, {
+const mongoClient = new MongoClient(process.env.DB_URL, {
   useUnifiedTopology: true,
 });
 

@@ -16,14 +16,7 @@ liveRouter
   .route(`/add`)
   .get(getAddLive)
   .post(addLive.single(`liveFile`), postAddLive);
-liveRouter.get(
-  `/:id([0-9a-f]{24})`,
-  function (req, res, next) {
-    console.log(req.header);
-    return next();
-  },
-  detail
-);
+liveRouter.get(`/:id([0-9a-f]{24})`, detail);
 liveRouter
   .route(`/:id([0-9a-f]{24})/edit`)
   .get(getLiveEdit)

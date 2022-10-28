@@ -1,10 +1,10 @@
+require(`dotenv`).config();
 import express from "express";
 import session from "express-session";
 import morgan from "morgan";
 import http from "http";
 import { Server } from "socket.io";
 import MongoStore from "connect-mongo";
-import fs from "fs";
 
 //
 import "./db";
@@ -29,10 +29,10 @@ app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(
   session({
-    secret: "keyboard cat",
+    secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/herse" }),
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
     // cookie: { secure: true },
   })
 );

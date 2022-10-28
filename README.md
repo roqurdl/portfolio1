@@ -6,13 +6,13 @@ Descrition
 With Node.js, REST API, MongoDB, socketIO
 
 shop
--Item
---list
---detail
---update
---delete
--user
---login
+Item
+list
+detail
+update
+delete
+user
+login
 --
 Live
 -box==>should be seller

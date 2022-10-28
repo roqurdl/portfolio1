@@ -50,6 +50,11 @@ export const postAddAccount = async (req, res) => {
   return res.redirect(`/login`);
 };
 
+//Social Login
+export function getGithub(req, res) {
+  return res.end();
+}
+
 export const profile = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
