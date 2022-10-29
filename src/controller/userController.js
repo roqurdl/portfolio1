@@ -1,6 +1,7 @@
 import User from "../models/User";
 import axios from "axios";
 import bcrypt from "bcrypt";
+import fetch from "node-fetch";
 
 const URL_USER = `screens/user`;
 
@@ -52,7 +53,8 @@ export const postAddAccount = async (req, res) => {
 };
 
 //Social Login
-export function startGithub(req, res) {
+//-------------Github with Axios
+export async function startGithub(req, res) {
   const baseUrl = `https://github.com/login/oauth/authorize`;
   const config = {
     client_id: process.env.GH_ID,
@@ -124,7 +126,41 @@ export async function finishGithub(req, res) {
     }
   }
 }
-
+//-------------naver with Fetch
+export async function startNaver(req, res) {
+  const baseUrl = `https://nid.naver.com/oauth2.0/authorize`;
+  const config = {
+    response_type: "code",
+    client_id: process.env.NAVER_ID,
+    redirect_uri: `http://localhost:5000/user/naver/callback`,
+    state: process.env.NAVER_STATE,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.redirect(finalUrl);
+}
+export async function finishNaver(req, res) {
+  const baseUrl = `https://nid.naver.com/oauth2.0/token`;
+  const config = {
+    grant_type: "authorization_code",
+    client_id: process.env.NAVER_ID,
+    client_secret: process.env.NAVER_SECRET,
+    code: req.query.code,
+    state: req.query.state,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  const userToken = await (
+    await fetch(finalUrl, {
+      method: `post`,
+      headers: {
+        client_id: process.env.NAVER_ID,
+        client_secret: process.env.NAVER_SECRET,
+      },
+    })
+  ).json();
+  console.log(userToken);
+}
 //
 export const profile = async (req, res) => {
   const { id } = req.params;

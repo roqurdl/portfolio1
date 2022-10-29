@@ -10,6 +10,8 @@ import {
   deleteUser,
   startGithub,
   finishGithub,
+  startNaver,
+  finishNaver,
 } from "../controller/userController";
 const userRouter = express.Router();
 
@@ -25,4 +27,7 @@ userRouter.get(`/:id([0-9a-f]{24})/delete`, deleteUser);
 //Social User
 userRouter.get(`/github/request`, startGithub);
 userRouter.get(`/github/callback`, finishGithub);
+
+userRouter.get(`/naver/request`, startNaver);
+userRouter.get(`/naver/callback`, finishNaver);
 export default userRouter;
