@@ -57,7 +57,7 @@ export function startGithub(req, res) {
   const config = {
     client_id: process.env.GH_ID,
     allow_signup: false,
-    scope: "read:user user:email",
+    scope: "user:email read:user",
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
@@ -76,12 +76,52 @@ export async function finishGithub(req, res) {
   });
   if ("access_token" in token.data) {
     const { access_token } = token.data;
-    const userData = await axios({
+    /**
+     * login: 'roqurdl'
+     * id: 103472276,
+     * avatar_url: 'https://avatars.githubusercontent.com/u/103472276?v=4'
+     * name: 'roqurdl'
+     * email: null,
+     */
+    const { data } = await axios({
       method: "get",
       url: `https://api.github.com/user`,
       headers: { Authorization: `Bearer ${access_token}` },
     });
-    console.log(userData.data);
+    /**
+     * data:[{
+      email: 'uyhnri@gmail.com',
+      primary: true,
+      verified: true,
+      visibility: 'private'
+    },]
+     */
+    const githubEmailData = await axios({
+      method: "get",
+      url: `https://api.github.com/user/emails`,
+      headers: { Authorization: `Bearer ${access_token}` },
+    });
+    const githubEmail = githubEmailData.data.find(
+      (emailData) => emailData.primary === true && emailData.verified === true
+    );
+    if (!githubEmail) {
+      return res.redirect(`/login`);
+    }
+    let user = await User.findOne({ email: githubEmail.email });
+    if (!user) {
+      user = await User.create({
+        email: githubEmail.email,
+        username: data.id,
+        name: data.name,
+        social: true,
+        password: "",
+      });
+      req.session.loggedIn = true;
+      req.session.user = user;
+      return res.redirect(`/`);
+    } else {
+      return res.redirect(`/login`);
+    }
   }
 }
 
