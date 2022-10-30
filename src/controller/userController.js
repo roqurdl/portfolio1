@@ -66,7 +66,7 @@ export async function startGithub(req, res) {
   return res.redirect(finalUrl);
 }
 export async function finishGithub(req, res) {
-  const token = await axios({
+  const githubToken = await axios({
     method: "post",
     url: `https://github.com/login/oauth/access_token`,
     headers: { Accept: "application/json" },
@@ -76,8 +76,8 @@ export async function finishGithub(req, res) {
       code: req.query.code,
     },
   });
-  if ("access_token" in token.data) {
-    const { access_token } = token.data;
+  if ("access_token" in githubToken.data) {
+    const { access_token } = githubToken.data;
     /**
      * login: 'roqurdl'
      * id: 103472276,
@@ -150,7 +150,7 @@ export async function finishNaver(req, res) {
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
-  const userToken = await (
+  const naverToken = await (
     await fetch(finalUrl, {
       method: `post`,
       headers: {
@@ -159,7 +159,37 @@ export async function finishNaver(req, res) {
       },
     })
   ).json();
-  console.log(userToken);
+  const { access_token } = naverToken;
+  /**
+   * resultcode: '00',
+    message: 'success',
+    response: {
+    id: 'c1b_agcX8BCAx5b1r_f5oWYeQkiAJ8Y5UbOB5Y4h6xM',
+    profile_image: 'https://ssl.pstatic.net/static/pwe/address/img_profile.png',
+    email: 'uyhn@jr.naver.com',
+    name: '김민석'
+  }
+   */
+  const { response } = await (
+    await fetch(`https://openapi.naver.com/v1/nid/me`, {
+      headers: { Authorization: `Bearer ${access_token}` },
+    })
+  ).json();
+  let user = await User.findOne({ email: response.email });
+  if (!user) {
+    user = await User.create({
+      email: response.email,
+      username: response.id,
+      name: response.name,
+      social: true,
+      password: "",
+    });
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect(`/`);
+  } else {
+    return res.redirect(`/login`);
+  }
 }
 //
 export const profile = async (req, res) => {
