@@ -5,7 +5,9 @@ import morgan from "morgan";
 import http from "http";
 import { Server } from "socket.io";
 import MongoStore from "connect-mongo";
-
+//for Google login
+import passport from "passport";
+import "./config/googleAuth";
 //
 import "./db";
 import "./models/Product";
@@ -38,9 +40,9 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(`/public`, express.static(__dirname + "/public"));
 app.use(`/uploads`, express.static(`uploads`));
-app.get(`uploads/lives`, function (req, res) {
-  return console.log(req);
-});
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(localMiddleware);
 app.use(`/`, rootRouter);

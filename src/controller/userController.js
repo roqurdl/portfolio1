@@ -2,6 +2,7 @@ import User from "../models/User";
 import axios from "axios";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
+import passport from "passport";
 
 const URL_USER = `screens/user`;
 
@@ -191,7 +192,17 @@ export async function finishNaver(req, res) {
     return res.redirect(`/login`);
   }
 }
-//
+//-------------google with passport
+export function startGoogle(req, res) {
+  passport.authenticate(`google`, { scope: [`email`, "profile"] });
+}
+export function finishGoogle(req, res) {
+  passport.authenticate(`google`, {
+    successRedirect: `/`,
+    failureRedirect: `/login`,
+  });
+}
+
 export const profile = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);

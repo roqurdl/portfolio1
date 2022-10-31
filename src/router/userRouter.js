@@ -12,6 +12,8 @@ import {
   finishGithub,
   startNaver,
   finishNaver,
+  startGoogle,
+  finishGoogle,
 } from "../controller/userController";
 const userRouter = express.Router();
 
@@ -30,4 +32,8 @@ userRouter.get(`/github/callback`, finishGithub);
 
 userRouter.get(`/naver/request`, startNaver);
 userRouter.get(`/naver/callback`, finishNaver);
+
+userRouter.get(`/google/request`, startGoogle);
+userRouter.get(`/google/callback`, finishGoogle);
+
 export default userRouter;
