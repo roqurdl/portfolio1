@@ -7,7 +7,7 @@ import { Server } from "socket.io";
 import MongoStore from "connect-mongo";
 //for Google login
 import passport from "passport";
-import "./config/googleAuth";
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 //
 import "./db";
 import "./models/Product";
@@ -19,6 +19,9 @@ import productRouter from "./router/productRouter";
 import stylistRouter from "./router/stylistRouter";
 import liveRouter from "./router/liveRouter";
 import userRouter from "./router/userRouter";
+
+//Mongo Schema
+import User from "./models/User";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -41,8 +44,59 @@ app.use(express.urlencoded({ extended: true }));
 app.use(`/public`, express.static(__dirname + "/public"));
 app.use(`/uploads`, express.static(`uploads`));
 
+//-------------google with passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+      callbackURL: "http://localhost:5000/auth/google/callback",
+    },
+    /**
+     * About _json
+    sub: username,
+    name,
+    picture: Avatar url
+    email,
+    email_verified: true,
+    locale: 'ko'
+     */
+    async function (accessToken, refreshToken, profile, cb) {
+      const user = profile._json;
+      const exist = await User.findOne({ email: user.email });
+      try {
+        if (!exist) {
+          const newUser = await User.create({
+            username: user.sub,
+            email: user.email,
+            name: user.name,
+            social: true,
+            password: "",
+          });
+          return cb(null, newUser);
+        }
+      } catch (err) {
+        return cb(err);
+      }
+    }
+  )
+);
+
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function (req, res) {
+    console.log(req);
+    res.redirect("/");
+  }
+);
 
 app.use(localMiddleware);
 app.use(`/`, rootRouter);

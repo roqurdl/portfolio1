@@ -192,16 +192,6 @@ export async function finishNaver(req, res) {
     return res.redirect(`/login`);
   }
 }
-//-------------google with passport
-export function startGoogle(req, res) {
-  passport.authenticate(`google`, { scope: [`email`, "profile"] });
-}
-export function finishGoogle(req, res) {
-  passport.authenticate(`google`, {
-    successRedirect: `/`,
-    failureRedirect: `/login`,
-  });
-}
 
 export const profile = async (req, res) => {
   const { id } = req.params;

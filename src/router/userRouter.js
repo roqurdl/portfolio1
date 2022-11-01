@@ -33,7 +33,4 @@ userRouter.get(`/github/callback`, finishGithub);
 userRouter.get(`/naver/request`, startNaver);
 userRouter.get(`/naver/callback`, finishNaver);
 
-userRouter.get(`/google/request`, startGoogle);
-userRouter.get(`/google/callback`, finishGoogle);
-
 export default userRouter;
