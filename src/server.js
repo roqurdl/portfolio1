@@ -6,8 +6,8 @@ import http from "http";
 import { Server } from "socket.io";
 import MongoStore from "connect-mongo";
 //for Google login
-import passport from "passport";
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
+// import passport, { use } from "passport";
+// const GoogleStrategy = require("passport-google-oauth20").Strategy;
 //
 import "./db";
 import "./models/Product";
@@ -45,58 +45,69 @@ app.use(`/public`, express.static(__dirname + "/public"));
 app.use(`/uploads`, express.static(`uploads`));
 
 //-------------google with passport
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: "http://localhost:5000/auth/google/callback",
-    },
-    /**
-     * About _json
-    sub: username,
-    name,
-    picture: Avatar url
-    email,
-    email_verified: true,
-    locale: 'ko'
-     */
-    async function (accessToken, refreshToken, profile, cb) {
-      const user = profile._json;
-      const exist = await User.findOne({ email: user.email });
-      try {
-        if (!exist) {
-          const newUser = await User.create({
-            username: user.sub,
-            email: user.email,
-            name: user.name,
-            social: true,
-            password: "",
-          });
-          return cb(null, newUser);
-        }
-      } catch (err) {
-        return cb(err);
-      }
-    }
-  )
-);
+// passport.serializeUser(function (user, done) {
+//   console.log("serialize");
+//   console.log(user);
+//   done(null, user);
+// });
 
-app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  function (req, res) {
-    console.log(req);
-    res.redirect("/");
-  }
-);
+// passport.deserializeUser(function (user, done) {
+//   console.log("deserialize");
+//   console.log(user);
+//   done(null, user);
+// });
+// passport.use(
+//   new GoogleStrategy(
+//     {
+//       clientID: process.env.GOOGLE_ID,
+//       clientSecret: process.env.GOOGLE_SECRET,
+//       callbackURL: "http://localhost:5000/auth/google/callback",
+//     },
+//     /**
+//      * About _json
+//     sub: username,
+//     name,
+//     picture: Avatar url
+//     email,
+//     email_verified: true,
+//     locale: 'ko'
+//      */
+//     async function (accessToken, refreshToken, profile, cb) {
+//       const user = profile._json;
+//       const exist = await User.findOne({ email: user.email });
+//       try {
+//         if (!exist) {
+//           const newUser = await User.create({
+//             username: user.sub,
+//             email: user.email,
+//             name: user.name,
+//             social: true,
+//             password: "",
+//           });
+//           return cb(null, newUser);
+//         }
+//       } catch (err) {
+//         return cb(err);
+//       }
+//     }
+//   )
+// );
+
+// app.get(
+//   "/auth/google",
+//   passport.authenticate("google", { scope: ["profile", "email"] })
+// );
+// app.get(
+//   "/auth/google/callback",
+//   passport.authenticate("google", { failureRedirect: "/login" }),
+//   function (req, res) {
+//     console.log(req);
+//     res.redirect("/");
+//   }
+// );
 
 app.use(localMiddleware);
 app.use(`/`, rootRouter);

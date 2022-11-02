@@ -2,7 +2,6 @@ import User from "../models/User";
 import axios from "axios";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
-import passport from "passport";
 
 const URL_USER = `screens/user`;
 
@@ -133,7 +132,7 @@ export async function startNaver(req, res) {
   const config = {
     response_type: "code",
     client_id: process.env.NAVER_ID,
-    redirect_uri: `http://localhost:5000/user/naver/callback`,
+    redirect_uri: process.env.NAVER_REDIRECT_URL,
     state: process.env.NAVER_STATE,
   };
   const params = new URLSearchParams(config).toString();
@@ -188,6 +187,68 @@ export async function finishNaver(req, res) {
     req.session.loggedIn = true;
     req.session.user = user;
     return res.redirect(`/`);
+  } else {
+    return res.redirect(`/login`);
+  }
+}
+
+//------------google with googleapis
+export async function startGoogle(req, res) {
+  const baseUrl = `https://accounts.google.com/o/oauth2/v2/auth`;
+  const config = {
+    redirect_uri: process.env.GOOGLE_REDIRECT_URL,
+    client_id: process.env.GOOGLE_ID,
+    response_type: `code`,
+    prompt: "consent",
+    scope: `https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.redirect(finalUrl);
+}
+export async function finishGoogle(req, res) {
+  const { code } = req.query;
+  const {
+    data: { access_token, id_token },
+  } = await axios.post(`https://oauth2.googleapis.com/token`, {
+    grant_type: `authorization_code`,
+    code,
+    client_id: process.env.GOOGLE_ID,
+    client_secret: process.env.GOOGLE_SECRET,
+    redirect_uri: process.env.GOOGLE_REDIRECT_URL,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
+  /**
+   * id: username,
+    email,
+    verified_email: true,
+    name: '김민석',
+    picture: avatarUrl,
+    locale: 'ko'
+   */
+  const { data } = await axios.get(
+    `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
+    { headers: { Authorization: `Bearer ${id_token}` } }
+  );
+  console.log(data);
+  let user = await User.findOne({ email: data.email });
+  if (!user) {
+    if (data.verified_email === true) {
+      user = await User.create({
+        email: data.email,
+        username: data.id,
+        name: data.name,
+        social: true,
+        password: "",
+      });
+      req.session.loggedIn = true;
+      req.session.user = user;
+      return res.redirect(`/`);
+    } else {
+      return res.redirect(`/login`);
+    }
   } else {
     return res.redirect(`/login`);
   }
