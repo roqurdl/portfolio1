@@ -8,16 +8,8 @@ const userSchema = mongoose.Schema({
   name: { type: String, required: true },
   social: { type: Boolean, default: false },
   admin: { type: Boolean, default: false },
-  Lives: [
-    { type: mongoose.Schema.Types.ObjectId, required: true, ref: `Live` },
-  ],
-  products: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: `Product`,
-    },
-  ],
+  lives: [{ type: mongoose.Schema.Types.ObjectId, ref: "Live" }],
+  products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
 });
 
 const saltRounds = 5;

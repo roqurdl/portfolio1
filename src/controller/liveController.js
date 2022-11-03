@@ -1,4 +1,6 @@
 import Live from "../models/Live";
+import User from "../models/User";
+
 const URL_LIVE = `screens/live`;
 
 export const liveHome = async (req, res) => {
@@ -12,13 +14,23 @@ export const postAddLive = async (req, res) => {
   const {
     file: { path: liveFile },
     body: { liveTitle, liveDescription },
+    session: { user: _id },
   } = req;
-  await Live.create({
-    liveTitle,
-    liveUrl: liveFile,
-    liveDescription,
-  });
-  return res.redirect(`/live`);
+  try {
+    const newLive = await Live.create({
+      liveTitle,
+      liveUrl: liveFile,
+      liveDescription,
+      owner: _id,
+    });
+    const user = await User.findById(_id);
+    user.lives.push(newLive._id);
+    console.log(user.lives);
+    user.save();
+    return res.redirect(`/live`);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const detail = async (req, res) => {

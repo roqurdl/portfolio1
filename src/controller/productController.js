@@ -1,4 +1,5 @@
 import Product from "../models/Product";
+import User from "../models/User";
 
 const URL_PRODUCT = `screens/product`;
 
@@ -18,15 +19,24 @@ export const postAddProduct = async (req, res) => {
   const {
     files: { productImg, descriptImg },
     body: { productName, price, description },
+    session: { user: _id },
   } = req;
-  await Product.create({
-    title: productName,
-    price,
-    description,
-    productImg: productImg[0].path,
-    descriptImg: descriptImg[0].path,
-  });
-  return res.redirect(`/`);
+  try {
+    const newProduct = await Product.create({
+      title: productName,
+      price,
+      description,
+      productImg: productImg[0].path,
+      descriptImg: descriptImg[0].path,
+      owner: _id,
+    });
+    const user = await User.findById(_id);
+    user.products.push(newProduct._id);
+    user.save();
+    return res.redirect(`/`);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const detail = async (req, res) => {
