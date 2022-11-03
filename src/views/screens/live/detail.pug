@@ -5,3 +5,13 @@ block contents
         video(width="500", height="500" controls)
             source(src=`/${live.liveUrl}`)
         a(href=`/live/${live.id}/edit`) Edit Live &rarr;
+        if loggedIn    
+            div
+                form
+                    textarea(cols="30", rows="10", placeholder="Write a nice comment.")
+                    button Add Comment
+        div 
+            ul comment
+block scripts 
+     if loggedIn
+        script

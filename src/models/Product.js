@@ -7,6 +7,7 @@ const productSchema = mongoose.Schema({
   createdAt: Date,
   productImg: { type: String, required: true },
   descriptImg: { type: String, required: true },
+  owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
 });
 
 const Product = mongoose.model(`Product`, productSchema);

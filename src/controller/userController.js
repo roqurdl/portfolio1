@@ -191,8 +191,7 @@ export async function finishNaver(req, res) {
     return res.redirect(`/login`);
   }
 }
-
-//------------google with googleapis
+//------------google
 export async function startGoogle(req, res) {
   const baseUrl = `https://accounts.google.com/o/oauth2/v2/auth`;
   const config = {
@@ -232,7 +231,6 @@ export async function finishGoogle(req, res) {
     `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
     { headers: { Authorization: `Bearer ${id_token}` } }
   );
-  console.log(data);
   let user = await User.findOne({ email: data.email });
   if (!user) {
     if (data.verified_email === true) {
@@ -250,10 +248,11 @@ export async function finishGoogle(req, res) {
       return res.redirect(`/login`);
     }
   } else {
-    return res.redirect(`/login`);
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect(`/`);
   }
 }
-
 export const profile = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
