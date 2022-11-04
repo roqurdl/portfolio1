@@ -31,8 +31,13 @@ export const postAddProduct = async (req, res) => {
       owner: _id,
     });
     const user = await User.findById(_id);
-    user.products.push(newProduct._id);
-    await user.save();
+    // user.products.push(newProduct._id);
+    // await user.save();
+    let products = user.products;
+    products.push(newProduct._id);
+    await User.findByIdAndUpdate(_id, {
+      products,
+    });
     return res.redirect(`/`);
   } catch (error) {
     console.log(error);
@@ -41,7 +46,7 @@ export const postAddProduct = async (req, res) => {
 
 export const detail = async (req, res) => {
   const { id } = req.params;
-  const product = await Product.findById(id);
+  const product = await Product.findById(id).populate("owner");
   return res.render(`${URL_PRODUCT}/detail`, { product });
 };
 
@@ -70,6 +75,16 @@ export const postEdit = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   const { id } = req.params;
+  const { _id } = req.session.user;
+  const product = await Product.findById(id);
+  const user = await User.findById(_id);
+  let list = user.products;
+  const products = list.filter((data) => {
+    return String(product._id) !== String(data._id);
+  });
+  await User.findByIdAndUpdate(_id, {
+    products,
+  });
   await Product.findByIdAndDelete(id);
   return res.redirect(`/shop`);
 };

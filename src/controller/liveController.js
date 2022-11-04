@@ -16,26 +16,27 @@ export const postAddLive = async (req, res) => {
     body: { liveTitle, liveDescription },
     session: { user: _id },
   } = req;
-  console.log(_id);
-  try {
-    const newLive = await Live.create({
-      liveTitle,
-      liveUrl: liveFile,
-      liveDescription,
-      owner: _id,
-    });
-    const user = await User.findById(_id);
-    user.lives.push(newLive._id);
-    await user.save();
-    return res.redirect(`/live`);
-  } catch (error) {
-    console.log(error);
-  }
+  const newLive = await Live.create({
+    liveTitle,
+    liveUrl: liveFile,
+    liveDescription,
+    owner: _id,
+  });
+  const user = await User.findById(_id);
+  // 원인은 모르지만 save()가 작동을 안함.
+  // user.lives.push(newLive._id);
+  // await user.save();
+  let lives = user.lives;
+  lives.push(newLive._id);
+  await User.findByIdAndUpdate(_id, {
+    lives,
+  });
+  return res.redirect(`/live`);
 };
 
 export const detail = async (req, res) => {
   const { id } = req.params;
-  const live = await Live.findById(id);
+  const live = await Live.findById(id).populate("owner");
   return res.render(`${URL_LIVE}/detail`, { live });
 };
 
@@ -60,6 +61,16 @@ export const postLiveEdit = async (req, res) => {
 
 export const deleteLive = async (req, res) => {
   const { id } = req.params;
+  const { _id } = req.session.user;
+  const live = await Live.findById(id);
+  const user = await User.findById(_id);
+  let list = user.products;
+  const lives = list.filter((data) => {
+    return String(live._id) !== String(data._id);
+  });
+  await User.findByIdAndUpdate(_id, {
+    lives,
+  });
   await Live.findByIdAndDelete(id);
   return res.redirect(`/live`);
 };

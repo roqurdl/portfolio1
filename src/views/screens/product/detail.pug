@@ -2,9 +2,10 @@ extends ../../layout.pug
 block contents 
     div
         nav 
-            ul 
-                li 
-                    a(href=`/product/${product.id}/edit`) Edit Product
+            ul
+                if String(loggedInUser._id)===String(product.owner._id)
+                    li 
+                        a(href=`/product/${product.id}/edit`) Edit Product
     div
         h1 #{product.title} 
         img(src=`/${product.productImg}`)
