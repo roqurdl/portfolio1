@@ -32,7 +32,7 @@ export const postAddProduct = async (req, res) => {
     });
     const user = await User.findById(_id);
     user.products.push(newProduct._id);
-    user.save();
+    await user.save();
     return res.redirect(`/`);
   } catch (error) {
     console.log(error);

@@ -118,12 +118,13 @@ export async function finishGithub(req, res) {
         social: true,
         password: "",
       });
-      req.session.loggedIn = true;
-      req.session.user = user;
-      return res.redirect(`/`);
-    } else {
+    }
+    if (user.username !== String(data.id)) {
       return res.redirect(`/login`);
     }
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect(`/`);
   }
 }
 //-------------naver with Fetch
@@ -184,12 +185,13 @@ export async function finishNaver(req, res) {
       social: true,
       password: "",
     });
-    req.session.loggedIn = true;
-    req.session.user = user;
-    return res.redirect(`/`);
-  } else {
+  }
+  if (user.username !== String(response.id)) {
     return res.redirect(`/login`);
   }
+  req.session.loggedIn = true;
+  req.session.user = user;
+  return res.redirect(`/`);
 }
 //------------google
 export async function startGoogle(req, res) {
@@ -241,13 +243,10 @@ export async function finishGoogle(req, res) {
         social: true,
         password: "",
       });
-      req.session.loggedIn = true;
-      req.session.user = user;
-      return res.redirect(`/`);
-    } else {
+    }
+    if (user.username !== String(data.id)) {
       return res.redirect(`/login`);
     }
-  } else {
     req.session.loggedIn = true;
     req.session.user = user;
     return res.redirect(`/`);

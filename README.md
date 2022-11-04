@@ -46,3 +46,6 @@ WebRTC의 Data Channel의 기능을 통해서 채팅상담 기능을 추가할 �
 user CURD Basic
 Login=> use session
 node Streaming 적용
+
+google과 github Login 중 email address 가 겹쳐 문제가 발생.
+username을 통해서 이를 한 번 더 걸러주는 작업으로 통해 해결.

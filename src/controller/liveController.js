@@ -16,6 +16,7 @@ export const postAddLive = async (req, res) => {
     body: { liveTitle, liveDescription },
     session: { user: _id },
   } = req;
+  console.log(_id);
   try {
     const newLive = await Live.create({
       liveTitle,
@@ -25,8 +26,7 @@ export const postAddLive = async (req, res) => {
     });
     const user = await User.findById(_id);
     user.lives.push(newLive._id);
-    console.log(user.lives);
-    user.save();
+    await user.save();
     return res.redirect(`/live`);
   } catch (error) {
     console.log(error);
