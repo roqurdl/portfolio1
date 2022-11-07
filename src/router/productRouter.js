@@ -7,12 +7,13 @@ import {
   postEdit,
   deleteProduct,
 } from "../controller/productController";
-import { addProduct } from "../middleware";
+import { addProduct, protectMiddleware } from "../middleware";
 const productRouter = express.Router();
 
 productRouter.get(`/:id([0-9a-f]{24})`, detail);
 productRouter
   .route(`/:id([0-9a-f]{24})/edit`)
+  .all(protectMiddleware)
   .get(getEdit)
   .post(
     addProduct.fields([
@@ -21,9 +22,13 @@ productRouter
     ]),
     postEdit
   );
-productRouter.route(`/:id([0-9a-f]{24})/delete`).get(deleteProduct);
+productRouter
+  .route(`/:id([0-9a-f]{24})/delete`)
+  .all(protectMiddleware)
+  .get(deleteProduct);
 productRouter
   .route(`/add`)
+  .all(protectMiddleware)
   .get(getAddProduct)
   .post(
     addProduct.fields([

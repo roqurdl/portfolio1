@@ -15,17 +15,23 @@ import {
   startGoogle,
   finishGoogle,
 } from "../controller/userController";
+import { protectMiddleware } from "../middleware";
 const userRouter = express.Router();
 
 // Nation User
 userRouter.route(`/add`).get(getAddAccount).post(postAddAccount);
-userRouter.get(`/:id([0-9a-f]{24})/profile`, profile);
-userRouter.route(`/:id([0-9a-f]{24})/edit`).get(getEdit).post(postEdit);
+userRouter.all(protectMiddleware).get(`/:id([0-9a-f]{24})/profile`, profile);
+userRouter
+  .route(`/:id([0-9a-f]{24})/edit`)
+  .all(protectMiddleware)
+  .get(getEdit)
+  .post(postEdit);
 userRouter
   .route(`/:id([0-9a-f]{24})/password`)
+  .all(protectMiddleware)
   .get(getEditPassword)
   .post(postEditPassword);
-userRouter.get(`/:id([0-9a-f]{24})/delete`, deleteUser);
+userRouter.all(protectMiddleware).get(`/:id([0-9a-f]{24})/delete`, deleteUser);
 //Social User
 userRouter.get(`/github/request`, startGithub);
 userRouter.get(`/github/callback`, finishGithub);
