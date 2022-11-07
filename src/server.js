@@ -34,6 +34,7 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(`/public`, express.static(__dirname + "/public"));
 app.use(`/uploads`, express.static(`uploads`));
+app.use(`/static`, express.static(`dist`));
 
 app.use(localMiddleware);
 app.use(`/`, rootRouter);

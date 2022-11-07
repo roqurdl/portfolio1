@@ -9,6 +9,7 @@ html(lang="en")
     body
         include ./partials/header.pug
         main
-            block contents
-            block scripts
+            block contents           
         include ./partials/footer.pug
+    block scripts
+    script(src="/static/js/main.js")
