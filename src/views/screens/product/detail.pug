@@ -12,3 +12,12 @@ block contents
         p #{product.price}
         p #{product.description}
         img(src=`/${product.descriptImg}`)
+    if loggedIn
+        div.commentBox
+            form
+                textarea(cols="30", rows="10", placeholder="Write a nice comment.")
+                button Add Comment
+    div.commentView 
+        ul comment
+block scripts 
+    script(src="/static/js/commentSection.js")
