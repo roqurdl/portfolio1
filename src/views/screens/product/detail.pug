@@ -6,7 +6,7 @@ block contents
                 if String(loggedInUser._id)===String(product.owner._id)
                     li 
                         a(href=`/product/${product.id}/edit`) Edit Product
-    div
+    div#productCotainer(data-id=`${product.id}`)
         h1 #{product.title} 
         img(src=`/${product.productImg}`)
         p #{product.price}
@@ -14,7 +14,7 @@ block contents
         img(src=`/${product.descriptImg}`)
     if loggedIn
         div.commentBox
-            form
+            form#commentForm
                 textarea(cols="30", rows="10", placeholder="Write a nice comment.")
                 button Add Comment
     div.commentView 

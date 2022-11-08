@@ -88,3 +88,9 @@ export const deleteProduct = async (req, res) => {
   await Product.findByIdAndDelete(id);
   return res.redirect(`/shop`);
 };
+
+export const createComment = (req, res) => {
+  console.log(req.params);
+  console.log(req.body);
+  return res.end();
+};

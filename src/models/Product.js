@@ -8,6 +8,9 @@ const productSchema = mongoose.Schema({
   productImg: { type: String, required: true },
   descriptImg: { type: String, required: true },
   owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
+  productComments: [
+    { type: mongoose.Schema.Types.ObjectId, ref: `productComment` },
+  ],
 });
 
 const Product = mongoose.model(`Product`, productSchema);
