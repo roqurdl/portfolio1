@@ -1,5 +1,6 @@
 import Product from "../models/Product";
 import User from "../models/User";
+import { ProductComment } from "../models/Comment";
 
 const URL_PRODUCT = `screens/product`;
 
@@ -89,8 +90,31 @@ export const deleteProduct = async (req, res) => {
   return res.redirect(`/shop`);
 };
 
-export const createComment = (req, res) => {
-  console.log(req.params);
-  console.log(req.body);
-  return res.end();
+export const createComment = async (req, res) => {
+  const {
+    session: { user },
+    body: { text },
+    params: { id },
+  } = req;
+  const product = await Product.findById(id);
+  const owner = await User.findById(user._id);
+  if (!product || !owner) {
+    return res.sendStatus(404);
+  }
+  const productComment = await ProductComment.create({
+    text,
+    owner: user._id,
+    product: id,
+  });
+  // owner.productComments.push(productComment._id);
+  // owner.save();
+  let productComments = user.productComments;
+  productComments.push(productComment._id);
+  await User.findByIdAndUpdate(user._id, {
+    productComments,
+  });
+  product.productComments.push(productComment._id);
+  product.save();
+
+  return res.sendStatus(201);
 };

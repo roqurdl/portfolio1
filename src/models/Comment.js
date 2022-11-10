@@ -17,7 +17,8 @@ const ProductCommentSchema = mongoose.Schema({
   createdAt: { type: Date, required: true, default: Date.now },
 });
 
-const ProductComment = mongoose.model(`liveComment`, ProductCommentSchema);
-const LiveComment = mongoose.model(`liveComment`, LiveCommentSchema);
-
-export default { ProductComment, LiveComment };
+export const ProductComment = mongoose.model(
+  `productComment`,
+  ProductCommentSchema
+);
+export const LiveComment = mongoose.model(`liveComment`, LiveCommentSchema);
