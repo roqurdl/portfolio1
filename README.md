@@ -49,3 +49,5 @@ node Streaming 적용
 
 google과 github Login 중 email address 가 겹쳐 문제가 발생.
 username을 통해서 이를 한 번 더 걸러주는 작업으로 통해 해결.
+
+userd에는 comment 정보는 저장X ==>DB무리

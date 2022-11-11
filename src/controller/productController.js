@@ -47,7 +47,9 @@ export const postAddProduct = async (req, res) => {
 
 export const detail = async (req, res) => {
   const { id } = req.params;
-  const product = await Product.findById(id).populate("owner");
+  const product = await Product.findById(id)
+    .populate("owner")
+    .populate("productComments");
   return res.render(`${URL_PRODUCT}/detail`, { product });
 };
 
@@ -97,8 +99,7 @@ export const createComment = async (req, res) => {
     params: { id },
   } = req;
   const product = await Product.findById(id);
-  const owner = await User.findById(user._id);
-  if (!product || !owner) {
+  if (!product) {
     return res.sendStatus(404);
   }
   const productComment = await ProductComment.create({
@@ -106,15 +107,34 @@ export const createComment = async (req, res) => {
     owner: user._id,
     product: id,
   });
-  // owner.productComments.push(productComment._id);
-  // owner.save();
-  let productComments = user.productComments;
-  productComments.push(productComment._id);
-  await User.findByIdAndUpdate(user._id, {
-    productComments,
-  });
   product.productComments.push(productComment._id);
   product.save();
+  return res.status(201).json({ newCommentId: productComment._id });
+};
 
-  return res.sendStatus(201);
+export const deleteComment = async (req, res) => {
+  const {
+    params: { id },
+    session: {
+      user: { _id },
+    },
+    body: { productId },
+  } = req;
+  const comment = await ProductComment.findById(id);
+  const product = await Product.findById(productId);
+  if (!comment) {
+    return res.sendStatus(403);
+  }
+  if (String(comment.owner) !== String(_id)) {
+    return res.sendStatus(403);
+  }
+  let commentList = product.productComments;
+  const productComments = commentList.filter((data) => {
+    return String(id) !== String(data._id);
+  });
+  await ProductComment.findByIdAndUpdate(productId, {
+    productComments,
+  });
+  await ProductComment.findByIdAndDelete(id);
+  return res.status(200);
 };

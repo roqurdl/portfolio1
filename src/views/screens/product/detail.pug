@@ -18,6 +18,12 @@ block contents
                 textarea(cols="30", rows="10", placeholder="Write a nice comment.")
                 button Add Comment
     div.commentView 
-        ul comment
+        ul.commentView_product
+            each comment in product.productComments.reverse() 
+                li(data-id=comment.id)
+                    span #{comment.text}
+                    if loggedIn && (loggedInUser._id === String(comment.owner))
+                        span.deleteBtn ❌
+
 block scripts 
     script(src="/static/js/commentSection.js")
