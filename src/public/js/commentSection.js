@@ -50,6 +50,9 @@ const handleDelete = async (event) => {
   comment.remove(event);
   await fetch(`/api/comments/${commentId}/delete`, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
       productId,
     }),

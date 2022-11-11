@@ -128,13 +128,15 @@ export const deleteComment = async (req, res) => {
   if (String(comment.owner) !== String(_id)) {
     return res.sendStatus(403);
   }
-  let commentList = product.productComments;
-  const productComments = commentList.filter((data) => {
-    return String(id) !== String(data._id);
-  });
-  await ProductComment.findByIdAndUpdate(productId, {
-    productComments,
-  });
+  // let commentList = product.productComments;
+  // const productComments = commentList.filter((data) => {
+  //   return id !== String(data._id);
+  // });
+  // // await Product.findByIdAndUpdate(productId, {
+  //   productComments,
+  // });
+  product.productComments.splice(product.productComments.indexOf(id), 1);
+  product.save();
   await ProductComment.findByIdAndDelete(id);
-  return res.status(200);
+  return res.sendStatus(200);
 };
