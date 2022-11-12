@@ -76,6 +76,7 @@ export const deleteLive = async (req, res) => {
     lives,
   });
   await Live.findByIdAndDelete(id);
+  await LiveComment.deleteMany({ live: id });
   await fs.unlink(live.liveUrl, (err) => {
     if (err) {
       console.log(err);

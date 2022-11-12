@@ -90,7 +90,7 @@ export const deleteProduct = async (req, res) => {
     products,
   });
   await Product.findByIdAndDelete(id);
-  await ProductComment.findOneAndDelete({ product: id });
+  await ProductComment.deleteMany({ product: id });
   if (product.descriptImg) {
     await fs.unlink(product.descriptImg, (err) => {
       if (err) {
