@@ -48,7 +48,7 @@ const handleDelete = async (event) => {
   const commentId = comment.dataset.id;
   const productId = productContainer.dataset.id;
   comment.remove(event);
-  await fetch(`/api/comments/${commentId}/delete`, {
+  await fetch(`/api/productComments/${commentId}/delete`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

@@ -1,3 +1,5 @@
+import fs from "fs";
+import { LiveComment } from "../models/Comment";
 import Live from "../models/Live";
 import User from "../models/User";
 
@@ -36,7 +38,9 @@ export const postAddLive = async (req, res) => {
 
 export const detail = async (req, res) => {
   const { id } = req.params;
-  const live = await Live.findById(id).populate("owner");
+  const live = await Live.findById(id)
+    .populate("owner")
+    .populate(`liveComments`);
   return res.render(`${URL_LIVE}/detail`, { live });
 };
 
@@ -72,5 +76,57 @@ export const deleteLive = async (req, res) => {
     lives,
   });
   await Live.findByIdAndDelete(id);
+  await fs.unlink(live.liveUrl, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
   return res.redirect(`/live`);
+};
+
+//Comment
+
+export const createLiveComment = async (req, res) => {
+  const {
+    session: { user },
+    body: { text },
+    params: { id },
+  } = req;
+  const live = await Live.findById(id);
+  if (!user) {
+    return res.status(403).redirect(`/login`);
+  }
+  if (!live) {
+    return res.sendStatus(404);
+  }
+  const liveComment = await LiveComment.create({
+    text,
+    owner: user._id,
+    live: id,
+  });
+  live.liveComments.push(liveComment._id);
+  live.save();
+  return res.status(201).json({ newCommentId: liveComment._id });
+};
+
+export const deleteLiveComment = async (req, res) => {
+  const {
+    params: { id },
+    session: {
+      user: { _id },
+    },
+    body: { liveId },
+  } = req;
+  const comment = await LiveComment.findById(id);
+  const live = await Live.findById(liveId);
+  if (!comment) {
+    return res.sendStatus(403);
+  }
+  if (String(comment.owner) !== String(_id)) {
+    return res.sendStatus(403);
+  }
+  live.liveComments.splice(live.liveComments.indexOf(id), 1);
+  live.save();
+  await LiveComment.findByIdAndDelete(id);
+  return res.sendStatus(200);
 };

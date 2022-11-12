@@ -51,6 +51,17 @@ export const postEditStylist = async (req, res) => {
 
 export const deleteStylist = async (req, res) => {
   const { id } = req.params;
+  const stylist = findById(id);
   await Stylist.findByIdAndDelete(id);
+  await fs.unlink(stylist.stylistImg, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  await fs.unlink(stylist.summaryImg, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
   return res.redirect(`/stylist`);
 };

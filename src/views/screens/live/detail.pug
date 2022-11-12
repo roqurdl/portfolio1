@@ -1,11 +1,22 @@
 extends ../../layout.pug
 block contents
-    div
+    div#liveContainer(data-id=`${live.id}`)
         h1 #{live.liveTitle} 
         video(width="500", height="500" controls)
             source(src=`/${live.liveUrl}`)
-        if String(loggedInUser._id)===String(product.owner._id)    
+        if String(loggedInUser._id)===String(live.owner._id)    
             a(href=`/live/${live.id}/edit`) Edit Live &rarr;
     if loggedIn
-        include ../../partials/writeComment.pug         
+        div.commentBox
+            form#commentForm
+                textarea(cols="30", rows="10", placeholder="Write a nice comment.")
+                button Add Comment
+    div.commentView 
+        ul.commentView_live
+            each comment in live.liveComments.reverse() 
+                li(data-id=comment.id)
+                    span #{comment.text}
+                    if loggedIn && (loggedInUser._id === String(comment.owner))
+                        span.deleteBtn ❌         
 block scripts
+    script(src="/static/js/liveCommentSection.js")

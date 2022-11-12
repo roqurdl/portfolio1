@@ -6,7 +6,8 @@ const BASE_JS = "./src/public/js/";
 module.exports = {
   entry: {
     main: BASE_JS + "main.js",
-    commentSection: BASE_JS + "commentSection.js",
+    productCommentSection: BASE_JS + "productCommentSection.js",
+    liveCommentSection: BASE_JS + "liveCommentSection.js",
   },
   mode: "development",
   plugins: [new MiniCssExtractPlugin({ filename: "css/styles.css" })],

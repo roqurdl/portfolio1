@@ -1,3 +1,4 @@
+import fs from "fs";
 import Product from "../models/Product";
 import User from "../models/User";
 import { ProductComment } from "../models/Comment";
@@ -89,16 +90,34 @@ export const deleteProduct = async (req, res) => {
     products,
   });
   await Product.findByIdAndDelete(id);
+  await ProductComment.findOneAndDelete({ product: id });
+  if (product.descriptImg) {
+    await fs.unlink(product.descriptImg, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
+  await fs.unlink(product.productImg, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
   return res.redirect(`/shop`);
 };
 
-export const createComment = async (req, res) => {
+//Comment
+
+export const createProductComment = async (req, res) => {
   const {
     session: { user },
     body: { text },
     params: { id },
   } = req;
   const product = await Product.findById(id);
+  if (!user) {
+    return res.status(403).redirect(`/login`);
+  }
   if (!product) {
     return res.sendStatus(404);
   }
@@ -112,7 +131,7 @@ export const createComment = async (req, res) => {
   return res.status(201).json({ newCommentId: productComment._id });
 };
 
-export const deleteComment = async (req, res) => {
+export const deleteProductComment = async (req, res) => {
   const {
     params: { id },
     session: {
@@ -128,13 +147,6 @@ export const deleteComment = async (req, res) => {
   if (String(comment.owner) !== String(_id)) {
     return res.sendStatus(403);
   }
-  // let commentList = product.productComments;
-  // const productComments = commentList.filter((data) => {
-  //   return id !== String(data._id);
-  // });
-  // // await Product.findByIdAndUpdate(productId, {
-  //   productComments,
-  // });
   product.productComments.splice(product.productComments.indexOf(id), 1);
   product.save();
   await ProductComment.findByIdAndDelete(id);
