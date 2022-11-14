@@ -9,6 +9,13 @@ export const liveHome = async (req, res) => {
   const lives = await Live.find({});
   return res.render(`screens/lives`, { lives });
 };
+export const getCreateLive = (req, res) => {
+  return res.render(`${URL_LIVE}/create`);
+};
+export const postCreateLive = (req, res) => {
+  return res.end();
+};
+
 export const getAddLive = (req, res) => {
   return res.render(`${URL_LIVE}/add`);
 };

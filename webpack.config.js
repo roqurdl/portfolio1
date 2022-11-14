@@ -8,6 +8,7 @@ module.exports = {
     main: BASE_JS + "main.js",
     productCommentSection: BASE_JS + "productCommentSection.js",
     liveCommentSection: BASE_JS + "liveCommentSection.js",
+    createLive: BASE_JS + "createLive.js",
   },
   mode: "development",
   plugins: [new MiniCssExtractPlugin({ filename: "css/styles.css" })],

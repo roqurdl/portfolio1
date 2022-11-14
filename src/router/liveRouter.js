@@ -7,11 +7,14 @@ import {
   getLiveEdit,
   postLiveEdit,
   deleteLive,
+  getCreateLive,
+  postCreateLive,
 } from "../controller/liveController";
 import { addLive, protectMiddleware } from "../middleware";
 const liveRouter = express.Router();
 
 liveRouter.get(`/`, liveHome);
+liveRouter.route(`/create`).get(getCreateLive).post(postCreateLive);
 liveRouter
   .route(`/add`)
   .all(protectMiddleware)
