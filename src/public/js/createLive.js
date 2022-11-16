@@ -6,18 +6,24 @@ const cameraList = document.querySelector(`#cameras`);
 const audioList = document.querySelector(`#audios`);
 
 let Stream;
+let videoFile;
+let recorder;
 let muted = false;
 let camera = false;
 
+async function getConnectedDevices(type) {
+  /**
+   * device.kind = audio or vided
+   * device.label = divce name
+   * device.deviceId = unique numver of device
+   */
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  return devices.filter((device) => device.kind === type);
+}
+
 async function getCameras() {
   try {
-    /**
-     * device.kind = audio or vided
-     * device.label = divce name
-     * device.deviceId = unique numver of device
-     */
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    const cameras = devices.filter((device) => device.kind === "videoinput");
+    const cameras = await getConnectedDevices(`videoinput`);
     const currentCamera = Stream.getVideoTracks()[0];
     cameras.forEach((camera) => {
       const option = document.createElement("option");
@@ -26,26 +32,11 @@ async function getCameras() {
       if (currentCamera.label === camera.label) {
         option.selected = true;
       }
-      cameraList.appendChild(option);
+      cameraList.add(option);
     });
   } catch (err) {
     console.log(err);
   }
-}
-
-async function getAudios() {
-  const devices = await navigator.mediaDevices.enumerateDevices();
-  const audios = devices.filter((device) => device.kind === "audioinput");
-  const currentAudio = Stream.getAudioTracks()[0];
-  audios.forEach((audio) => {
-    const option = document.querySelector("option");
-    option.value = audio.id;
-    option.innerText = audio.label;
-    if (currentAudio.label === audio.label) {
-      option.selected = true;
-    }
-    audioList.appendChild(option);
-  });
 }
 
 async function init() {
@@ -58,18 +49,10 @@ async function init() {
     console.log(error);
   }
   await getCameras();
-  // await getAudios();
   video.srcObject = Stream;
   video.play();
 }
 init();
-
-async function handleStart() {
-  startBtn.innerText = "Stop";
-  startBtn.removeEventListener("click", handleStart);
-  startBtn.addEventListener("click", handleStop);
-  const recorder = new MediaRecorder(Stream);
-}
 
 function handleMute() {
   Stream.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
@@ -92,12 +75,36 @@ function handleCamera() {
   }
 }
 
-function handleStop() {
-  startBtn.innerText = "Recording";
-  startBtn.removeEventListener("click", handleStop);
-  startBtn.addEventListener("click", handleStart);
+function handleDownload() {
+  const a = document.createElement("a");
+  a.href = videoFile;
+  a.download = "MyRecording.webm";
+  document.body.appendChild(a);
+  a.click();
 }
 
-startBtn.addEventListener(`click`, handleStart);
+function handleRecordStop() {
+  startBtn.innerText = "Download Record";
+  startBtn.removeEventListener("click", handleRecordStop);
+  startBtn.addEventListener("click", handleDownload);
+  recorder.stop();
+}
+
+async function handleRecordStart() {
+  startBtn.innerText = "Stop Recording";
+  startBtn.removeEventListener("click", handleRecordStart);
+  startBtn.addEventListener("click", handleRecordStop);
+  recorder = new MediaRecorder(Stream);
+  recorder.ondataavailable = (e) => {
+    videoFile = URL.createObjectURL(e.data);
+    video.srcObject = null;
+  };
+  recorder.start();
+  setTimeout(() => {
+    recorder.stop();
+  }, 3000);
+}
+
+startBtn.addEventListener(`click`, handleRecordStart);
 muteBtn.addEventListener(`click`, handleMute);
 cameraBtn.addEventListener(`click`, handleCamera);
