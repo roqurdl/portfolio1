@@ -1,3 +1,5 @@
+import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
+
 const video = document.querySelector(`video`);
 const startBtn = document.querySelector(`#startBtn`);
 const muteBtn = document.querySelector(`#mute`);
@@ -75,10 +77,17 @@ function handleCamera() {
   }
 }
 
-function handleDownload() {
+async function handleDownload() {
+  const ffmpeg = createFFmpeg({ log: true });
+  await ffmpeg.load();
+  ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile));
+  await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4");
+  const mp4File = ffmpeg.FS("readFile", "output.mp4");
+  const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
+  const mp4Url = URL.createObjectURL(mp4Blob);
   const a = document.createElement("a");
-  a.href = videoFile;
-  a.download = "MyRecording.webm";
+  a.href = mp4Url;
+  a.download = "MyRecording.mp4";
   document.body.appendChild(a);
   a.click();
 }
@@ -100,9 +109,6 @@ async function handleRecordStart() {
     video.srcObject = null;
   };
   recorder.start();
-  setTimeout(() => {
-    recorder.stop();
-  }, 3000);
 }
 
 startBtn.addEventListener(`click`, handleRecordStart);
