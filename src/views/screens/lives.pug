@@ -1,9 +1,10 @@
 extends ../layout.pug
 include ../mixins/lives.pug
-block contents 
-    a(href=`/live/create`) Create Live &rarr;
-    br
-    a(href=`/live/add`) Add Live &rarr;
+block contents
+    if loggedIn
+        a(href=`/live/create`) Create Live &rarr;
+        br
+        a(href=`/live/add`) Add Live &rarr;
     div 
         each live in lives 
          +liveList(live)

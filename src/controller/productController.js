@@ -1,5 +1,6 @@
 import fs from "fs";
 import Product from "../models/Product";
+import Live from "../models/Live";
 import User from "../models/User";
 import { ProductComment } from "../models/Comment";
 
@@ -7,7 +8,8 @@ const URL_PRODUCT = `screens/product`;
 
 export const home = async (req, res) => {
   const products = await Product.find({});
-  return res.render(`screens/home`, { products });
+  const lives = await Live.find({});
+  return res.render(`screens/home`, { products, lives });
 };
 
 export const shop = async (req, res) => {

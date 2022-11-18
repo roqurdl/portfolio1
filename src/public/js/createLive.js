@@ -5,7 +5,6 @@ const startBtn = document.querySelector(`#startBtn`);
 const muteBtn = document.querySelector(`#mute`);
 const cameraBtn = document.querySelector(`#camera`);
 const cameraList = document.querySelector(`#cameras`);
-const audioList = document.querySelector(`#audios`);
 
 let Stream;
 let videoFile;
