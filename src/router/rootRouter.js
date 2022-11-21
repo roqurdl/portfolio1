@@ -4,7 +4,7 @@ import { getLogin, postLogin, logout } from "../controller/userController";
 const rootRouter = express.Router();
 
 rootRouter.get("/", home);
-rootRouter.get("/shop", shop);
+rootRouter.route("/shop").get(shop);
 rootRouter.route("/login").get(getLogin).post(postLogin);
 rootRouter.get(`/logout`, logout);
 

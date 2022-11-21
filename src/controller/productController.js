@@ -13,9 +13,14 @@ export const home = async (req, res) => {
 };
 
 export const shop = async (req, res) => {
-  const products = await Product.find({});
+  const { find } = req.query;
+  console.log(find);
+  const products = await Product.find({
+    title: { $regex: new RegExp(`${find}`, "i") },
+  });
   return res.render(`screens/shop`, { products });
 };
+
 export const getAddProduct = (req, res) => {
   return res.render(`${URL_PRODUCT}/add`);
 };

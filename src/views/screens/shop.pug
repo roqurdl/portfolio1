@@ -6,6 +6,9 @@ block contents
             ul 
                 li
                     a(href="/product/add") Add Product
+    form(method="GET")
+        input(type="text" id="find" name="find" required) 
+        button Search 
     div
         each product in products 
             +productList(product)

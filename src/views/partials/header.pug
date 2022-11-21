@@ -9,8 +9,6 @@ header
                 a(href=`/live`) Lives
             li 
                 a(href=`/shop`) shop
-            li 
-                a(href=`/category`) Category
             if loggedIn 
                 li
                     a(href=`/user/${loggedInUser._id}/profile`) #{loggedInUser.name}'s Profile
